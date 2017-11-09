@@ -19,29 +19,24 @@ function create() {
         game.add.sprite(game.world.randomX, game.world.randomY, 'mushroom');
     }
 
-    cursors = game.input.keyboard.createCursorKeys();
 
 }
 
 function update() {
 
-    if (cursors.up.isDown)
-    {
-        game.camera.y -= 4;
-    }
-    else if (cursors.down.isDown)
-    {
-        game.camera.y += 4;
-    }
+    if (this.game.input.activePointer.isDown) { 
+        if (this.game.origDragPoint) {      
+            // move the camera by the amount the mouse has moved since last update      
+            this.game.camera.x += this.game.origDragPoint.x - this.game.input.activePointer.position.x;     
+            this.game.camera.y += this.game.origDragPoint.y - this.game.input.activePointer.position.y; 
+        }   
+    // set new drag origin to current position  
+    this.game.origDragPoint = this.game.input.activePointer.position.clone();
 
-    if (cursors.left.isDown)
-    {
-        game.camera.x -= 4;
-    }
-    else if (cursors.right.isDown)
-    {
-        game.camera.x += 4;
-    }
+    } else {    
+        this.game.origDragPoint = null;
+}
+
 
 }
 
