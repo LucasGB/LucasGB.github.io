@@ -4,9 +4,11 @@ var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload:
 function preload() {
     game.load.image('mushroom', 'assets/sprites/mushroom2.png');
     game.load.image('player', 'assets/sprites/pangball.png');
+    game.load.image('arrow', 'assets/sprites/longarrow2.png');
 }
 
 var cursors;
+var arrow = null;
 
 var touch_held = false;
 var player;
@@ -40,15 +42,19 @@ function create() {
 
     this.game.input.onDown.add(get_pressed_position, this);
     this.game.input.onUp.add(slingshot, this);
+
 }
 
 function update() {
-
-
+    if(arrow != null){
+        arrow.angle += Math.atan2(xVector / yVector) * 180 / Math.PI;
+    }
 }
 
 function get_pressed_position(){
+
     if(!touch_held){
+        arrow = game.add.sprite(player.x, player.y, 'arrow');
         player.body.moves = false;
         pressed_px = this.game.input.activePointer.position.x;
         pressed_py = this.game.input.activePointer.position.y;
@@ -58,6 +64,8 @@ function get_pressed_position(){
 
 // RX Geometria Analítica!
 function slingshot(){
+    arrow.destroy();
+    arrow = null;
     released_px = this.game.input.activePointer.position.x;
     released_py = this.game.input.activePointer.position.y;
     touch_held = false;
