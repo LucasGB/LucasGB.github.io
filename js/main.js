@@ -5,6 +5,11 @@ function preload() {
     game.load.image('mushroom', 'assets/sprites/mushroom2.png');
     game.load.image('player', 'assets/sprites/pangball.png');
     game.load.image('arrow', 'assets/sprites/longarrow2.png');
+
+    // teste
+    game.load.tilemap('map', 'assets/tilemaps/maps/tulo.json', null, Phaser.Tilemap.TILED_JSON);
+
+    game.load.image('tiles', 'assets/tilemaps/tilesets/tiles.png');
 }
 
 var cursors;
@@ -19,6 +24,9 @@ var xVector;
 var yVector;
 var angle;
 
+var map;
+var layer;
+
 function create() {
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -32,13 +40,38 @@ function create() {
 
     game.stage.backgroundColor = '#2d2d2d';
 
-    //  Make our game world 2000x2000 pixels in size (the default is to match the game size)
-    game.world.setBounds(0, 0, 2000, 2000);
+//    //  Make our game world 2000x2000 pixels in size (the default is to match the game size)
+//    game.world.setBounds(0, 0, 2000, 2000);
+//
+//    for (var i = 0; i < 150; i++)
+//    {
+//        game.add.sprite(game.world.randomX, game.world.randomY, 'mushroom');
+//    }
 
-    for (var i = 0; i < 150; i++)
-    {
-        game.add.sprite(game.world.randomX, game.world.randomY, 'mushroom');
-    }
+
+
+
+//teste
+    map = game.add.tilemap('map');
+
+    map.addTilesetImage('tiles');
+
+    layer = map.createLayer('Camada de Tiles 1');
+
+    layer.resizeWorld();
+    //  Here we create our ground group
+    ground = game.add.group();
+    ground.enableBody = true;
+
+    //  And now we convert all of the Tiled objects with an ID of 34 into sprites within the ground group
+    map.createFromObjects('mapa', 2, 'tiles', 1, true, false, ground);
+
+    // fim teste
+
+
+
+
+
 
     game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
