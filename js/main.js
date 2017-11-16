@@ -10,12 +10,13 @@ function preload() {
 var cursors;
 var arrow = null;
 
-var touch_held = false;
 var player;
 var pressed_px;
 var pressed_py;
 var released_px;
 var released_py;
+var xVector;
+var yVector;
 var angle;
 
 function create() {
@@ -25,6 +26,7 @@ function create() {
     player = game.add.sprite(10, 1900, 'player');
 
     game.physics.enable(player, Phaser.Physics.ARCADE);
+    player.anchor.setTo(0.5);
 
     player.body.fixedRotation = true;
 
@@ -46,20 +48,22 @@ function create() {
 }
 
 function update() {
-    if(arrow != null){
-        arrow.angle += Math.atan2(xVector / yVector) * 180 / Math.PI;
-    }
+    if(arrow != null){ rotate_arrow(); } 
+}
+
+function rotate_arrow(){
+    xVector = (this.game.input.activePointer.position.x - pressed_px) * -1;
+    yVector = (this.game.input.activePointer.position.y - pressed_py) * -1;
+    arrow.angle = Math.atan2(-yVector,  -xVector) * 180 / Math.PI;
 }
 
 function get_pressed_position(){
-
-    if(!touch_held){
-        arrow = game.add.sprite(player.x, player.y, 'arrow');
-        player.body.moves = false;
-        pressed_px = this.game.input.activePointer.position.x;
-        pressed_py = this.game.input.activePointer.position.y;
-        touch_held = true;
-    }
+    arrow = game.add.sprite(player.x, player.y, 'arrow');
+    arrow.anchor.setTo(1, 0.5);
+    player.body.moves = false;
+    pressed_px = this.game.input.activePointer.position.x;
+    pressed_py = this.game.input.activePointer.position.y;
+    touch_held = true;
 }
 
 // RX Geometria Analítica!
@@ -70,8 +74,8 @@ function slingshot(){
     released_py = this.game.input.activePointer.position.y;
     touch_held = false;
 
-    var xVector = (released_px - pressed_px) * -1;
-    var yVector = (released_py - pressed_py) * -1;
+    xVector = (released_px - pressed_px) * -1;
+    yVector = (released_py - pressed_py) * -1;
 
     var norm = Math.pow(( Math.pow(xVector, 2) + Math.pow(yVector, 2) ), 1/2);
     var x_velocity = xVector/norm * 300;
