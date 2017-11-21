@@ -7,9 +7,9 @@ function preload() {
     game.load.image('arrow', 'assets/sprites/longarrow2.png');
 
     // teste
-    game.load.tilemap('map', 'assets/tilemaps/maps/tulo.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map', 'map.json', null, Phaser.Tilemap.TILED_JSON);
 
-    game.load.image('tiles', 'assets/tilemaps/tilesets/tiles.png');
+    game.load.image('tiles', 'tiles.png');
 }
 
 var cursors;
@@ -52,25 +52,25 @@ function create() {
 
 
 //teste
-    map = game.add.tilemap('map');
-
-    map.addTilesetImage('tiles');
-
-    layer = map.createLayer('Camada de Tiles 1');
-
-    layer.resizeWorld();
-    //  Here we create our ground group
-    ground = game.add.group();
-    ground.enableBody = true;
-
-    //  And now we convert all of the Tiled objects with an ID of 34 into sprites within the ground group
-    map.createFromObjects('mapa', 2, 'tiles', 1, true, false, ground);
+//    map = game.add.tilemap('map');
+//
+//    map.addTilesetImage('tiles');
+//
+//    layer = map.createLayer('Camada de Tiles 1');
+//
+//    layer.resizeWorld();
+//    //  Here we create our ground group
+//    ground = game.add.group();
+//    ground.enableBody = true;
+//
+//    //  And now we convert all of the Tiled objects with an ID of 34 into sprites within the ground group
+//    map.createFromObjects('mapa', 2, 'tiles', 1, true, false, ground);
 
     // fim teste
 
 
 
-
+    createMap();
 
 
     game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
@@ -79,6 +79,15 @@ function create() {
     this.game.input.onUp.add(slingshot, this);
 
 }
+
+function createMap() {
+        let mapTmx = this.game.add.tilemap('map');
+        this.game.world.setBounds(0, 0, mapTmx.widthInPixels, mapTmx.heightInPixels);
+
+        this.map = this.game.add.group()   
+        mapTmx.createFromObjects('mapa', 1, 'tiles', 0, true, false, this.map, Block);
+}
+
 
 function update() {
     if(arrow != null){ rotate_arrow(); } 
