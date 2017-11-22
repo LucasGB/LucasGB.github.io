@@ -7,9 +7,9 @@ function preload() {
     game.load.image('arrow', 'assets/sprites/longarrow2.png');
 
     // teste
-    game.load.tilemap('map', 'map.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.tilemap('map', 'mapa2.json', null, Phaser.Tilemap.TILED_JSON);
 
-    game.load.image('tiles', 'tiles.png');
+    //game.load.image('tiles', 'tiles.png');
 }
 
 var cursors;
