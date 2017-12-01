@@ -5,15 +5,12 @@ class PlayState extends GameState {
         this.game.load.image('player', 'assets/sprites/pangball.png');
         this.game.load.image('arrow', 'assets/sprites/longarrow2.png');
 
-        //this.game.load.image('mapacerto_tiles', 'assets/tilemaps/tilesets/mapacerto_tileset.png');
         this.game.load.image('black_square', 'assets/tilemaps/tilesets/black_square.png');
         this.game.load.image('red_square', 'assets/tilemaps/tilesets/red_square.png');
         this.game.load.image('blue_square', 'assets/tilemaps/tilesets/blue_square.png');
         this.game.load.image('green_square', 'assets/tilemaps/tilesets/green_square.png');
-        //this.game.load.image('uol', 'assets/tilemaps/tilesets/uol.png');
 
-        // teste
-        this.game.load.tilemap('map', 'mapacerto.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('map', 'assets/tilemaps/maps/mapacerto.json', null, Phaser.Tilemap.TILED_JSON);
 
     }
 
@@ -32,7 +29,6 @@ class PlayState extends GameState {
         this.game.add.existing(this.arrow)
         this.arrow.kill()
 
-
         // mapa com paredes
         this.createMap()
 
@@ -46,16 +42,20 @@ class PlayState extends GameState {
 
         // adicionar controles de full screen a tela
         //super.initFullScreenButtons()
+
+        this.hops = 0;
     }
     
     createMap() {
         let mapTmx = this.game.add.tilemap('map');
         this.game.world.setBounds(0, 0, mapTmx.widthInPixels, mapTmx.heightInPixels);
 
-        this.map = this.game.add.group()   
-        mapTmx.createFromObjects('Object Layer 1', 1, 'black_square', 0, true, false, this.map, Block);
-        mapTmx.createFromObjects('Object Layer 1', 2, 'red_square', 1, true, false, this.map, Block);
-        mapTmx.createFromObjects('Object Layer 1', 3, 'blue_square', 2, true, false, this.map, Block);
+        this.map = this.game.add.group()
+        this.wall_group = this.game.add.group()
+
+        mapTmx.createFromObjects('Object Layer 1', 1, 'black_square', 0, true, false, this.wall_group, Block);
+        mapTmx.createFromObjects('Object Layer 1', 2, 'red_square', 1, true, false, this.wall_group, Block);
+        mapTmx.createFromObjects('Object Layer 1', 3, 'blue_square', 2, true, false, this.wall_group, Block);
         mapTmx.createFromObjects('Object Layer 1', 4, 'green_square', 3, true, false, this.map, Block);
     }
 
@@ -83,11 +83,13 @@ class PlayState extends GameState {
         this.player.body.velocity.setTo(x_velocity, y_velocity);
     }
 
-
-
-
     update() { 
-    
+        this.game.physics.arcade.collide(this.player, this.wall_group, this.stick, null, this);
+    }
+
+    stick() {
+        this.player.body.moves = false;
+        this.hops += 1;
     }
 
     render() {

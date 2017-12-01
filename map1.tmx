@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="800" height="600" tilewidth="20" tileheight="20" nextobjectid="2">
- <tileset firstgid="1" source="map-tileset.tsx"/>
- <objectgroup name="mapa">
-  <object id="1" gid="2" x="0" y="12001" width="16006" height="541.03"/>
- </objectgroup>
-</map>
