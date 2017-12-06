@@ -7,4 +7,13 @@ class Block extends Phaser.TileSprite {
         this.tag = 'wall'
         this.autoCull = true
     }
+
+    setTarget(){
+		this.game.add.tween(this)
+                .to({x: this.target_x, y: this.target_y}, 5000)
+                .to({x: this.x, y: this.y}, 5000)
+                .loop(-1)
+                .start()
+    }
+
 }

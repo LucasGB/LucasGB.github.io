@@ -22,7 +22,7 @@ class PlayState extends GameState {
         this.stage.backgroundColor = '#2d2d2d';
 
         //this.player = new Player(this.game, this.game.width*1/5, this.game.height/2, 'player')
-        this.player = new Player(this.game, 300, 400, 'player')
+        this.player = new Player(this.game, 50, 650, 'player')
         this.game.add.existing(this.player)
 
         this.arrow = new Arrow(this.game, this.player.x, this.player.y, 'arrow')
@@ -52,11 +52,18 @@ class PlayState extends GameState {
 
         this.map = this.game.add.group()
         this.wall_group = this.game.add.group()
+        this.sliding_box = this.game.add.group()
 
-        mapTmx.createFromObjects('Object Layer 1', 1, 'black_square', 0, true, false, this.wall_group, Block);
+        mapTmx.createFromObjects('Object Layer 1', 1, 'black_square', 0, true, false, this.sliding_box, Block);
         mapTmx.createFromObjects('Object Layer 1', 2, 'red_square', 1, true, false, this.wall_group, Block);
         mapTmx.createFromObjects('Object Layer 1', 3, 'blue_square', 2, true, false, this.wall_group, Block);
         mapTmx.createFromObjects('Object Layer 1', 4, 'green_square', 3, true, false, this.map, Block);
+
+        this.create_tweens();
+    }
+
+    create_tweens(){
+        this.sliding_box.callAll('setTarget');
     }
 
     get_pressed_position(){
