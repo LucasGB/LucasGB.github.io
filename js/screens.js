@@ -21,7 +21,6 @@ class PlayState extends GameState {
 
         this.stage.backgroundColor = '#2d2d2d';
 
-        //this.player = new Player(this.game, this.game.width*1/5, this.game.height/2, 'player')
         this.player = new Player(this.game, 30, 685, 'player')
         this.game.add.existing(this.player)
         this.player.body.moves = false;
@@ -33,6 +32,7 @@ class PlayState extends GameState {
         // mapa com paredes
         this.createMap()
 
+        // Sets camera to follow player
         this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1)
 
         this.game.input.onDown.add(this.get_pressed_position, this);
@@ -102,7 +102,7 @@ class PlayState extends GameState {
     }
 
     stick() {
-        this.player.body.moves = false;
+        this.player.body.moves = false; 
         this.hops += 1;
     }
 
