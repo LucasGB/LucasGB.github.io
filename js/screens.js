@@ -22,8 +22,9 @@ class PlayState extends GameState {
         this.stage.backgroundColor = '#2d2d2d';
 
         //this.player = new Player(this.game, this.game.width*1/5, this.game.height/2, 'player')
-        this.player = new Player(this.game, 50, 650, 'player')
+        this.player = new Player(this.game, 30, 685, 'player')
         this.game.add.existing(this.player)
+        this.player.body.moves = false;
 
         this.arrow = new Arrow(this.game, this.player.x, this.player.y, 'arrow')
         this.game.add.existing(this.arrow)
@@ -44,6 +45,8 @@ class PlayState extends GameState {
         //super.initFullScreenButtons()
 
         this.hops = 0;
+
+        //this.game.time.advancedTiming = true;
     }
     
     createMap() {
@@ -67,27 +70,31 @@ class PlayState extends GameState {
     }
 
     get_pressed_position(){
-        this.arrow.reset(this.player.x, this.player.y)
-        this.player.moves = false
-        this.arrow.pressed_px = this.game.input.activePointer.position.x;
-        this.arrow.pressed_py = this.game.input.activePointer.position.y;
+        if(!this.player.body.moves){
+            console.log(this.player.body.moves)
+            this.arrow.reset(this.player.x, this.player.y)
+            this.arrow.pressed_px = this.game.input.activePointer.position.x;
+            this.arrow.pressed_py = this.game.input.activePointer.position.y;
+        }
     }
 
     slingshot(){
-        this.arrow.kill();
-        this.arrow.released_px = this.game.input.activePointer.position.x;
-        this.arrow.released_py = this.game.input.activePointer.position.y;
-    
-        this.arrow.xVector = (this.arrow.released_px - this.arrow.pressed_px) * -1;
-        this.arrow.yVector = (this.arrow.released_py - this.arrow.pressed_py) * -1;
-    
-        var norm = Math.pow(( Math.pow(this.arrow.xVector, 2) + Math.pow(this.arrow.yVector, 2) ), 1/2);
-        var x_velocity = this.arrow.xVector/norm * 300;
-        var y_velocity = this.arrow.yVector/norm * 300;
-    
-        this.player.body.moves = true;
-    
-        this.player.body.velocity.setTo(x_velocity, y_velocity);
+        if(!this.player.body.moves){
+            this.arrow.kill();
+            this.arrow.released_px = this.game.input.activePointer.position.x;
+            this.arrow.released_py = this.game.input.activePointer.position.y;
+        
+            this.arrow.xVector = (this.arrow.released_px - this.arrow.pressed_px) * -1;
+            this.arrow.yVector = (this.arrow.released_py - this.arrow.pressed_py) * -1;
+        
+            var norm = Math.pow(( Math.pow(this.arrow.xVector, 2) + Math.pow(this.arrow.yVector, 2) ), 1/2);
+            var x_velocity = this.arrow.xVector/norm * 300;
+            var y_velocity = this.arrow.yVector/norm * 300;
+        
+            this.player.body.moves = true;
+        
+            this.player.body.velocity.setTo(x_velocity, y_velocity);
+        }
     }
 
     update() { 
@@ -100,6 +107,7 @@ class PlayState extends GameState {
     }
 
     render() {
+        //this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
 
     }
 }
