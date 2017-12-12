@@ -16,6 +16,9 @@ class Level1 extends GameState {
         this.game.load.image('bad_cannon', 'assets/sprites/bad_cannon.png');
         this.game.load.image('bad_cannon_laser', 'assets/sprites/cannon_laser.png');
         this.game.load.image('saw', 'assets/sprites/saw.png');
+        this.game.load.image('vid', 'assets/sprites/vid.png');
+        this.game.load.image('vida', 'assets/sprites/vida.png');
+        this.game.load.image('scor', 'assets/sprites/score.png');
         this.game.load.spritesheet('coin', 'assets/sprites/coin.png', 32, 32);
 
         this.game.load.tilemap('map', 'assets/tilemaps/maps/level1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -67,6 +70,7 @@ class Level1 extends GameState {
         this.hops = 0;
         this.next_fire = 0;
         this.fire_rate = 2000;
+        this.score = 0;
 
         this.ballBounce = this.game.add.audio('bounces')
         this.shoot = this.game.add.audio('shoot')
@@ -130,10 +134,54 @@ class Level1 extends GameState {
         //this.game.add.existing(this.cannon)
 
         this.create_tweens();
+        this.createHUD();
+        this.vidas = this.game.add.group();
+        this.plotLives();
+
 
         
 
     }
+
+    
+    createHUD() {
+        this.LEVEL = 1;
+        this.scoreBase = this.game.add.sprite(23, 23, 'scor');
+        this.scoreBase.alpha = 0.7
+        this.scoreBase.scale.setTo(3.5, 2.9);
+        this.scoreBase1 = this.game.add.sprite(650, 20, 'vid');
+        this.scoreBase1.scale.setTo(2.4, 2.2);
+        this.scoreBase1.alpha = 0.7
+        this.scoreBase.fixedToCamera = true;
+        this.scoreBase1.fixedToCamera = true;
+        this.LEVELBase = this.game.add.sprite(350, 23, 'scor')
+        this.LEVELBase.scale.setTo(2.4, 2.4);
+        //this.LEVELBase.anchor.setTo(0.5, 0.5)
+        this.LEVELBase.fixedToCamera = true;
+
+        this.LEVELText = this.game.add.text(370, 27, 'LEVEL: ' + this.LEVEL, {
+            font: "28px Calibri",
+            //style: "bold",
+            fill: "#ffffff",
+            align: "center"
+        });
+        this.LEVELText.fixedToCamera = true;
+
+        this.scoreText = this.game.add.text(32, 30, 'SCORE: 0', {
+            font: "28px Calibri",
+            //style: "bold",
+            fill: "#ffffff",
+            align: "left"
+        });
+        this.scoreText.fixedToCamera = true;
+        this.livesText = this.game.add.text(670, 30, 'VIDAS', {
+            font: "28px Calibri",
+            fill: "#ffffff",
+            align: "left"
+        });
+        this.livesText.fixedToCamera = true;
+    }
+
 
     create_tweens(){
         this.sliding_box.callAll('setTarget');
@@ -163,6 +211,15 @@ class Level1 extends GameState {
             this.player.body.moves = true;
         
             this.player.body.velocity.setTo(x_velocity, y_velocity);
+        }
+    }
+
+    plotLives() {
+        this.vidas.removeAll()
+        for (var i = 0; i < this.game.lives; i++) {
+            var v = this.vidas.create(670 + i * 18 * 1.5, 60, 'vida')
+            v.fixedToCamera = true;
+            v.scale.setTo(1.5)
         }
     }
 
@@ -202,6 +259,10 @@ class Level1 extends GameState {
         this.player.y = 685;
         this.player.body.moves = false;
         this.hops = 0;
+        this.vidas.getFirstExists().destroy();
+        if(this.vidas.countLiving() == 0){
+            this.game.state.start("Gameover");
+        }
     }
 
     next_level(){
@@ -253,6 +314,7 @@ class Level1 extends GameState {
         } else if(sprite.tag == 'coin'){
             this.score += 20
         }
+        this.scoreText.text = 'SCORE: ' + this.score
         sprite.kill()
         console.log('pila gay')
     }

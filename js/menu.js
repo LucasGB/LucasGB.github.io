@@ -9,7 +9,7 @@ class MainMenu extends GameState {
 
 	create(){
 		this.stage.backgroundColor = '#2d2d2d';
-		this.titleText = this.game.make.text(this.game.world.centerX, 100, "Pftlfll", {
+		this.titleText = this.game.make.text(400, 100, "Oaoj Sacul", {
 	      font: 'bold 60pt TheMinion',
 	      fill: '#FDFFB5',
 	      align: 'center'
@@ -26,16 +26,16 @@ class MainMenu extends GameState {
       		this.game.state.start("Level1");
     	});
     	this.addMenuOption('Options', function () {
-      	//game.state.start("Options");
+      		this.game.state.start("Options");
     	});
     	this.addMenuOption('Credits', function () {
-      	//game.state.start("Credits");
+      		this.game.state.start("Credits");
     	});
 	}
 
 	addMenuOption(text, callback){
 	    var optionStyle = { font: '30pt TheMinion', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', srokeThickness: 4};
-	    var txt = this.game.add.text(this.game.world.centerX, (this.optionCount * 80) + 200, text, optionStyle);
+	    var txt = this.game.add.text(400, (this.optionCount * 80) + 200, text, optionStyle);
 	    txt.anchor.setTo(0.5);
 	    txt.stroke = "rgba(0,0,0,0";
 	    txt.strokeThickness = 4;
