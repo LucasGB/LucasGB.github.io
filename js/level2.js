@@ -1,5 +1,5 @@
 
-class PlayState extends GameState {
+class Level2 extends GameState {
 
     preload() {
         this.game.load.image('player', 'assets/sprites/pangball.png');
@@ -14,7 +14,7 @@ class PlayState extends GameState {
         this.game.load.image('bad_cannon', 'assets/sprites/bad_cannon.png');
         this.game.load.image('bad_cannon_laser', 'assets/sprites/cannon_laser.png');
 
-        this.game.load.tilemap('map', 'assets/tilemaps/maps/mapacerto.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('map', 'assets/tilemaps/maps/level2.json', null, Phaser.Tilemap.TILED_JSON);
 
     }
 
@@ -62,13 +62,14 @@ class PlayState extends GameState {
         // Groups
         this.map = this.game.add.group()
         this.wall_group = this.game.add.group()
+        this.damaging_wall_group = this.game.add.group()
         this.sliding_box = this.game.add.group()
         this.bullets = this.game.add.group()
         this.cannons = this.game.add.group()
 
         // Walls
         mapTmx.createFromObjects('Object Layer 1', 1, 'black_square', 0, true, false, this.sliding_box, Block);
-        mapTmx.createFromObjects('Object Layer 1', 2, 'red_square', 1, true, false, this.wall_group, Block);
+        mapTmx.createFromObjects('Object Layer 1', 2, 'red_square', 1, true, false, this.damaging_wall_group, Block);
         mapTmx.createFromObjects('Object Layer 1', 3, 'blue_square', 2, true, false, this.wall_group, Block);
         mapTmx.createFromObjects('Object Layer 1', 4, 'green_square', 3, true, false, this.map, Block);
 
@@ -120,6 +121,9 @@ class PlayState extends GameState {
 
     update() { 
         this.game.physics.arcade.collide(this.player, this.wall_group, this.stick, null, this);
+        this.game.physics.arcade.collide(this.player, this.damaging_wall_group, this.reset_level, null, this);
+        this.game.physics.arcade.collide(this.player, this.bullets, this.reset_level, null, this);
+        this.game.physics.arcade.collide(this.player, this.sliding_box, this.bounce, null, this);
         this.game.physics.arcade.collide(this.bullets, this.wall_group, this.kill, null, this);
         this.fire_cannons();
 
@@ -130,6 +134,17 @@ class PlayState extends GameState {
     stick() {
         this.player.body.moves = false; 
         this.hops += 1;
+    }
+
+    reset_level(){
+        this.player.x = 50;
+        this.player.y = 685;
+        this.player.body.moves = false;
+        this.hops = 0;
+    }
+
+    bounce(){
+        this.player.body.bounce.setTo(1);
     }
 
     fire_cannons(){

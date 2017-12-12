@@ -6,12 +6,13 @@ let GAME = null
 class Game extends Phaser.Game {
     constructor () {        
         // Game(width, height, renderer, parent, state, transparent, antialias, physicsConfig)
-        super(900, 800, Phaser.CANVAS, 'game-container', null, false, false)
+        super(800, 600, Phaser.CANVAS, 'game-container', null, false, false)
 
         // adiciona estados ao jogo
-        this.state.add('Play', PlayState, false)
-        //this.state.add('Title', TitleState, false)
-        this.state.start('Play')
+        this.state.add('Level1', Level1, false)
+        this.state.add('Level2', Level2, false)
+        this.state.add('MainMenu', MainMenu, false)
+        this.state.start('MainMenu')
         GAME = this
     }
 }
