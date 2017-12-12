@@ -14,7 +14,11 @@ class Game extends Phaser.Game {
         this.state.add('Level12', Level12, false)
         this.state.add('Level23', Level23, false)
         this.state.add('MainMenu', MainMenu, false)
-        this.state.start('Level23')
+        this.state.add('Options', Options, false)
+        this.state.add('Credits', Credits, false)
+        this.state.add('Gameover', Gameover, false)
+        this.state.start('MainMenu')
+        this.lives = 3;
         GAME = this
     }
 }
