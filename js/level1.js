@@ -18,6 +18,13 @@ class Level1 extends GameState {
 
         this.game.load.tilemap('map', 'assets/tilemaps/maps/mapacerto.json', null, Phaser.Tilemap.TILED_JSON);
 
+        //Audio
+        this.game.load.audio('bounces', 'assets/audio/ballBounce.mp3')
+        this.game.load.audio('shoot', 'assets/audio/blaster.mp3')
+        this.game.load.audio('fundo', 'assets/audio/fundo.mp3')
+        this.game.load.audio('punch', 'assets/audio/punch.mp3')
+
+
     }
 
     create() {
@@ -54,6 +61,17 @@ class Level1 extends GameState {
         this.next_fire = 0;
         this.fire_rate = 2000;
 
+        this.ballBounce = this.game.add.audio('bounces')
+        this.shoot = this.game.add.audio('shoot')
+        this.punch = this.game.add.audio('punch')
+        this.fundo = this.game.add.audio('fundo')
+        this.fundo.volume = 0.2
+        this.ballBounce.volume = 0.2
+        this.shoot.volume = 0.005
+        this.punch.volume = 0.35
+        this.game.sound.setDecodedCallback([this.ballBounce, this.fundo,this.shoot, this.punch],this.update, this);
+        this.fundo.play()
+
         //this.game.time.advancedTiming = true;
     }
     
@@ -89,6 +107,9 @@ class Level1 extends GameState {
         //this.game.add.existing(this.cannon)
 
         this.create_tweens();
+
+        
+
     }
 
     create_tweens(){
@@ -136,11 +157,13 @@ class Level1 extends GameState {
     }
 
     stick() {
-        this.player.body.moves = false; 
+        this.player.body.moves = false;
+        this.ballBounce.play() 
         this.hops += 1;
     }
 
     reset_level(){
+        this.punch.play()
         this.player.x = 50;
         this.player.y = 685;
         this.player.body.moves = false;
@@ -161,7 +184,8 @@ class Level1 extends GameState {
             var gameInstance = this.game            
             for(var i = 0; i < this.cannons.children.length; i++){
                 var cannon = this.cannons.children[i]
-                if(cannon.alive){                    
+                if(cannon.alive){
+                    this.shoot.play()                    
                     var bullet = new Bullet(gameInstance, cannon.x, cannon.y+5, 'bad_cannon_laser');
                     bullet.anchor.setTo(0.5, 0.5)
                     if(cannon.facing == 'down'){
