@@ -1,5 +1,5 @@
 
-class Level1 extends GameState {
+class Level3 extends GameState {
 
     preload() {
         this.game.load.image('player', 'assets/sprites/pangball.png');
@@ -14,9 +14,8 @@ class Level1 extends GameState {
         this.game.load.image('bad_cannon', 'assets/sprites/bad_cannon.png');
         this.game.load.image('bad_cannon_laser', 'assets/sprites/cannon_laser.png');
         this.game.load.image('saw', 'assets/sprites/saw.png');
-        this.game.load.spritesheet('coin', 'assets/sprites/coin.png', 32, 32);
 
-        this.game.load.tilemap('map', 'assets/tilemaps/maps/level1.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('map', 'assets/tilemaps/maps/level3.json', null, Phaser.Tilemap.TILED_JSON);
 
     }
 
@@ -27,12 +26,9 @@ class Level1 extends GameState {
 
         this.stage.backgroundColor = '#2d2d2d';
 
-
-
         this.player = new Player(this.game, 50, 685, 'player')
         this.game.add.existing(this.player)
         this.player.body.moves = false;
-        this.player.body.bounce.setTo(1);
 
         this.arrow = new Arrow(this.game, this.player.x, this.player.y, 'arrow')
         this.game.add.existing(this.arrow)
@@ -41,6 +37,8 @@ class Level1 extends GameState {
         // mapa com paredes
         this.createMap()
 
+        // Sets camera to follow player
+        this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1)
 
         this.game.input.onDown.add(this.get_pressed_position, this);
         this.game.input.onUp.add(this.slingshot, this);
@@ -53,27 +51,17 @@ class Level1 extends GameState {
 
         // Creates enemies
         this.create_enemies()
-        this.create_consumables()
 
         this.hops = 0;
         this.next_fire = 0;
         this.fire_rate = 2000;
 
         //this.game.time.advancedTiming = true;
-
-        // Sets camera to follow player
-        this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1)
     }
 
-    create_enemies(){      
-
-    }
-
-    create_consumables(){
-        var coin = new Coin(this.game, 320, 672, 'coin')
-        var anim = coin.animations.add('spin')
-        coin.animations.play('spin', 15, true)
-        this.consumables.add(coin)
+    create_enemies(){
+        this.enemies = this.game.add.group()
+        this.enemies.add(new Saw(this.game, 20, 160, 'saw'))        
 
     }
     
@@ -89,7 +77,6 @@ class Level1 extends GameState {
         this.sliding_box = this.game.add.group()
         this.bullets = this.game.add.group()
         this.cannons = this.game.add.group()
-        this.consumables = this.game.add.group()
 
         // Walls
         mapTmx.createFromObjects('Object Layer 1', 1, 'black_square', 0, true, false, this.sliding_box, Block);
@@ -114,6 +101,9 @@ class Level1 extends GameState {
 
     create_tweens(){
         this.sliding_box.callAll('setTarget');
+
+
+
     }
 
     get_pressed_position(){
@@ -147,14 +137,9 @@ class Level1 extends GameState {
         this.game.physics.arcade.collide(this.player, this.wall_group, this.stick, null, this);
         this.game.physics.arcade.collide(this.player, this.damaging_wall_group, this.reset_level, null, this);
         this.game.physics.arcade.collide(this.player, this.bullets, this.reset_level, null, this);
-        this.game.physics.arcade.collide(this.player, this.goal_group, this.next_level, null, this);
-        this.game.physics.arcade.overlap(this.player, this.cannons, this.kill_sprite, null, this);
-        this.game.physics.arcade.overlap(this.player, this.consumables, this.kill_sprite, null, this);
-        this.game.physics.arcade.collide(this.player, this.sliding_box, null, null, this);
-
+        this.game.physics.arcade.collide(this.player, this.sliding_box, this.bounce, null, this);
         this.game.physics.arcade.collide(this.bullets, this.wall_group, this.kill, null, this);
-        
-        
+        this.game.physics.arcade.collide(this.player, this.goal_group, this.next_level, null, this);
         this.fire_cannons();
 
 
@@ -164,7 +149,7 @@ class Level1 extends GameState {
 
         //console.log('x: ',this.player.x, 'y: ', this.player.y);
         //console.log(this.player.body.moves)
-        //console.log('x: ', this.game.input.activePointer.position.x, ' y: ', this.game.input.activePointer.position.y);
+        console.log('x: ', this.game.input.activePointer.position.x, ' y: ', this.game.input.activePointer.position.y);
     }
 
     stick() {
@@ -181,6 +166,10 @@ class Level1 extends GameState {
 
     next_level(){
         this.game.state.start("Level2");
+    }
+
+    bounce(){
+        this.player.body.bounce.setTo(1);
     }
 
     fire_cannons(){
@@ -218,21 +207,12 @@ class Level1 extends GameState {
     }
 
     kill(object){
-        object.kill()        
-    }
-
-    kill_sprite(player, sprite){
-        if(sprite.tag == 'cannon'){
-            this.score += 5
-        } else if(sprite.tag == 'coin'){
-            this.score += 20
-        }
-        sprite.kill()
-        console.log('pila gay')
+        object.kill()
     }
 
     render() {
         //this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
+
     }
 }
 
