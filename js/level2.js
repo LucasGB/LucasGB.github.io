@@ -11,6 +11,7 @@ class Level2 extends GameState {
         this.game.load.image('green_square', 'assets/tilemaps/tilesets/green_square.png');
 
         // Sprites
+        this.game.load.image('fullscreen-button', 'assets/images/fullscreen-button.png');
         this.game.load.image('bad_cannon', 'assets/sprites/bad_cannon.png');
         this.game.load.image('bad_cannon_laser', 'assets/sprites/cannon_laser.png');
 
@@ -46,7 +47,7 @@ class Level2 extends GameState {
         //this.game.add.existing(this.fps)
 
         // adicionar controles de full screen a tela
-        //super.initFullScreenButtons()
+        super.initFullScreenButtons()
 
         this.hops = 0;
         this.next_fire = 0;
