@@ -23,7 +23,7 @@ class MainMenu extends GameState {
     	this.game.add.existing(this.titleText);
 	
     	this.addMenuOption('Start', function () {
-      		this.game.state.start("Level1");
+      		this.game.state.start("Level4");
     	});
     	this.addMenuOption('Options', function () {
       		this.game.state.start("Options");

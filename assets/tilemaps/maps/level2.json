@@ -63,6 +63,18 @@
                  "width":736,
                  "x":32,
                  "y":32
+                }, 
+                {
+                 "gid":4,
+                 "height":64,
+                 "id":12,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":704,
+                 "y":96
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -70,10 +82,11 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":12,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"2017.11.22",
+ "templategroups":[],
+ "tiledversion":"2017.10.31",
  "tileheight":32,
  "tilesets":[
         {
