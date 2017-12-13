@@ -268,6 +268,7 @@ class Level1 extends GameState {
         this.vidas.getFirstExists().destroy();
         if(this.vidas.countLiving() == 0){
             this.game.lives = 3
+            this.fundo.pause()
             this.game.state.start("Gameover");
         }
     }
