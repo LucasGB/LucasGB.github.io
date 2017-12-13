@@ -53,6 +53,7 @@ class Level4 extends GameState {
 
         // mapa com paredes
         this.createMap()
+        this.diamonds = 0
 
 
         this.game.input.onDown.add(this.get_pressed_position, this);
@@ -205,13 +206,18 @@ class Level4 extends GameState {
         this.game.physics.arcade.collide(this.player, this.enemies, this.reset_level, null, this);
         this.game.physics.arcade.overlap(this.player, this.consumables, this.kill_sprite, null, this);
 
-        this.game.physics.arcade.moveToObject(this.boss, this.player, 80);
+        this.game.physics.arcade.moveToObject(this.boss, this.player, 150);
 
-        if(this.game.time.now > this.next_spawn){
-            this.next_spawn += this.game.time.now + this.spawn_rate
-            var diamond = new Coin(this.game, Math.floor(Math.random()) * 600, Math.floor(Math.random()) * 600, 'diamond')
+        if(this.game.time.now >= this.next_spawn){
+            this.next_spawn = this.game.time.now + this.spawn_rate
+            var diamond = new Coin(this.game, Math.floor(Math.random() * 600), Math.floor(Math.random() * 600), 'diamond')
+            this.diamonds += 1
 
             this.consumables.add(diamond)
+        }
+
+        if(this.diamonds >= 20){
+            this.next_level()
         }
         
 
@@ -259,7 +265,6 @@ class Level4 extends GameState {
         }
         this.scoreText.text = 'SCORE: ' + this.score
         sprite.kill()
-        console.log('pila gay')
     }
 
     render() {
