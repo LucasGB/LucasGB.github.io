@@ -95,9 +95,11 @@ class Level1 extends GameState {
 
     create_consumables(){
         var coin = new Coin(this.game, 320, 672, 'coin')
+        var vida = new Vida(this.game, 820, 572, 'vida')
         var anim = coin.animations.add('spin')
         coin.animations.play('spin', 15, true)
         this.consumables.add(coin)
+        this.consumables.add(vida)
 
     }
     
@@ -254,6 +256,10 @@ class Level1 extends GameState {
     }
 
     reset_level(){
+
+        console.log(this.game.lives)
+        this.game.lives = this.game.lives -1
+        console.log(this.game.lives)
         this.punch.play()
         this.player.x = 50;
         this.player.y = 685;
@@ -261,6 +267,8 @@ class Level1 extends GameState {
         this.hops = 0;
         this.vidas.getFirstExists().destroy();
         if(this.vidas.countLiving() == 0){
+            this.game.lives = 3
+            this.fundo.pause()
             this.game.state.start("Gameover");
         }
     }
@@ -313,8 +321,12 @@ class Level1 extends GameState {
             this.score += 5
         } else if(sprite.tag == 'coin'){
             this.score += 20
+        }else if(sprite.tag == 'vida'){
+            this.game.lives = this.game.lives +1
+            this.plotLives()
         }
         this.scoreText.text = 'SCORE: ' + this.score
+
         sprite.kill()
         console.log('pila gay')
     }
