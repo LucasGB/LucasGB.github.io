@@ -165,7 +165,7 @@ class Level3 extends GameState {
     }
 
     next_level(){
-        this.game.state.start("Level2");
+        this.game.state.start("Level34");
     }
 
     bounce(){
